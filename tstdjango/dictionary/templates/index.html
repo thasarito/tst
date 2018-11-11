@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block style %}
+<style>
+.card {
+  width: 500px;
+  margin: 20px auto;
+  min-height: 100px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.score {
+  width: 9%;
+  display: inline-block;
+}
+
+.score * {
+  display: block;
+}
+
+.text {
+  width: 89%;
+  display: inline-block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="app">
+  <div class="card" v-for="word in words">
+    <div class="score">
+      <a v-on:click="Vote(word.id, 'up')">
+        [[ word.up ]]
+      <i class="fal fa-chevron-up"></i>
+      </a>
+      <a v-on:click="Vote(word.id, 'down')">
+        <i class="fal fa-chevron-down"></i>
+      [[ word.down ]]
+      </a>
+    </div>
+    <div class="text">
+      <p>[[ word.id ]]</p>
+      <h4>[[ word.name ]]</h4>
+      <p>[[ word.meaning ]]</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+  Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
+  var vm = new Vue ({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    data: {
+      words: [],
+      curWord: {},
+      curPage: 1,
+      trigger: 300,
+    },
+    mounted: function () {
+      this.getWords();
+      this.scroll();
+    },
+    methods: {
+      getWords: function () {
+        this.$http.get('/api/dictionary/')
+        .then((response) => {
+          this.words = response.data.results
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      },
+
+      scroll: function () {
+               window.onscroll = ev => {
+                 let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+                  if (bottomOfWindow) {
+                    // Load new page
+                      this.curPage += 1
+                      this.$http.get(`/api/dictionary/?page=${this.curPage}`)
+                      .then((response) => {
+                        this.words = this.words.concat(response.data.results)
+                      })
+                    // End Load
+                  }
+               };
+            },
+
+      Vote: function (id, act) {
+        this.$http.get('/api/dictionary/'+id)
+        .then((response) => {
+          this.curWord = response.data
+          this.curWord[act] += 1
+          this.$http.put(`/api/dictionary/${id}/`, this.curWord)
+          .then((response) => {
+            this.words[id - 1][act] = this.curWord[act]
+            // this.curWord = response.data
+            // this.words.result[id] = response.data
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        })
+      },
+
+      // putVote: function (id) {
+      //   this.$http.put(`/api/dictionary/${id}/`, this.curWord)
+      //   .then((response) => {
+      //     this.words.results[id] = response.data
+      //     // this.curWord = response.data
+      //     // this.words.result[id] = response.data
+      //   })
+      //   .catch((err) => {
+      //     console.log(err)
+      //   })
+      // },
+
+    },
+    // end methods
+
+  })
+</script>
+{% endblock %}
