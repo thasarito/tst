@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, pagination, generics
+from rest_framework import viewsets, pagination, generics, filters
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from .models import Dictionary
@@ -12,7 +12,10 @@ class DictionaryPagination(pagination.PageNumberPagination):
 class DictionaryView(viewsets.ModelViewSet):
     queryset = Dictionary.objects.all().order_by('-up')
     serializer_class = DictionarySerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'meaning',)
     pagination_class = DictionaryPagination
+
 
     @list_route()
     def percUp_list(self, request):

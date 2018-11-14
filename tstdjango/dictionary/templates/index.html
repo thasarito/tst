@@ -119,7 +119,7 @@ input[type=text] {
 
 .add-modal-content {
   height: 500px;
-  width: 700px;
+  width: 500px;
   margin: auto;
   background-color: white;
   border: 1px solid #d9d9d9;
@@ -131,13 +131,12 @@ input[type=text] {
 
 {% block content %}
 <h1 class="logo"><i class="fal fa-text-width"></i><i class="fal fa-integral"></i><i class="fal fa-text-height fa-flip-horizontal"></i></h1>
-  <div class="search-container">
-    <form action="/action_page.php">
-      <input type="text" placeholder="ค้นหา.." name="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-  </div>
+
 <div id="app">
+  <div class="search-container">
+      <input type="text" placeholder="ค้นหา.." v-model="live_search" aria-label="Search">
+      <button type="submit" v-on:click.prevent="getWords()"><i class="fa fa-search"></i></button>
+  </div>
   <div class="card animated slideInUp" v-for="word in words">
     <div class="score">
       <a v-on:click="Vote(word.id, 'up')">
@@ -182,14 +181,33 @@ input[type=text] {
       curPage: 1,
       trigger: 300,
       showModal: false,
+      search_term: '',
     },
+
     mounted: function () {
       this.getWords();
       this.scroll();
     },
+
+    computed: {
+      live_search: {
+        get() {
+          return this.search_term
+        },
+        set(newVal) {
+          this.search_term = newVal
+          this.getWords()
+        }
+      }
+    },
+
     methods: {
       getWords: function () {
-        this.$http.get(`${direction}`)
+        let api_url = '/api/dictionary/percUp_list'
+        if (true) {
+          api_url = `/api/dictionary/?search=${this.search_term}`
+        }
+        this.$http.get(`${api_url}`)
         .then((response) => {
           this.words = response.data.results
         })
