@@ -1,17 +1,68 @@
 {% extends 'base.html' %}
+{% block head %}
+
+{% endblock %}
+
 {% block style %}
 <style>
+* {
+  font-family: 'Bai Jamjuree', sans-serif;
+}
+
+.logo {
+  font-size: 100px;
+  text-align: center;
+  color: #bf9b30;
+}
+
+.search-container {
+  text-align: center;
+}
+
+input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+  width: 400px;
+  border: 1px solid #d9d9d9;
+}
+
+.search-container button {
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  background: #0074D9;
+  color: white;
+}
+
+.search-container button:hover {
+  background: white;
+  color: #0074D9;
+  border: 1px solid #0074D9;
+}
+
+#app {
+}
+
 .card {
-  width: 500px;
+  max-width: 500px;
   margin: 20px auto;
   min-height: 100px;
-  border: 1px solid black;
-  padding: 10px;
+  border: 1px solid #d9d9d9;
+  padding: 5px;
 }
 
 .score {
   width: 9%;
   display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  min-height: 100px;
+
 }
 
 .score * {
@@ -21,13 +72,73 @@
 .text {
   width: 89%;
   display: inline-block;
+  vertical-align: middle;
+  min-height: 100px;
+}
+
+.text h4 {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.text h4 span {
+  font-weight: 400;
+  font-size: 16px;
+}
+
+#add {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -50px;
+  background: none;
+  border: none;
+  font-size: 60px;
+  cursor: pointer;
+  color: #0074D9;
+}
+
+#add p {
+  width: 20px;
+  height: 20px;
+  margin: 0px;
+}
+
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+
+}
+
+
+.add-modal-content {
+  height: 500px;
+  width: 700px;
+  margin: auto;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
 }
 </style>
 {% endblock %}
 
 {% block content %}
+<h1 class="logo"><i class="fal fa-text-width"></i><i class="fal fa-integral"></i><i class="fal fa-text-height fa-flip-horizontal"></i></h1>
+  <div class="search-container">
+    <form action="/action_page.php">
+      <input type="text" placeholder="ค้นหา.." name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
 <div id="app">
-  <div class="card" v-for="word in words">
+  <div class="card animated slideInUp" v-for="word in words">
     <div class="score">
       <a v-on:click="Vote(word.id, 'up')">
         [[ word.up ]]
@@ -39,17 +150,28 @@
       </a>
     </div>
     <div class="text">
-      <p>[[ word.id ]]</p>
-      <h4>[[ word.name ]]</h4>
+      <h4>[[ word.name ]]<span> แปลว่า</span></h4>
       <p>[[ word.meaning ]]</p>
     </div>
 
   </div>
+  <div id="add" v-on:click="toggleModal()"><i class="fas fa-plus-circle"></i></div>
+  <!-- div Modal -->
+  <transition name="fade" enter-active-class="animated zoomInUp"  leave-active-class="animated zoomOut faster">
+    <div id="add-modal" class="modal" v-if="showModal" v-on:click.self="toggleModal()">
+      <div class="add-modal-content">
+        
+      </div>
+    </div>
+  </transition>
+  <!-- enddiv -->
 </div>
+
 {% endblock %}
 
 {% block script %}
 <script type="text/javascript">
+  const direction = '/api/dictionary/percUp_list'
   Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
   var vm = new Vue ({
     el: '#app',
@@ -59,6 +181,7 @@
       curWord: {},
       curPage: 1,
       trigger: 300,
+      showModal: false,
     },
     mounted: function () {
       this.getWords();
@@ -66,7 +189,7 @@
     },
     methods: {
       getWords: function () {
-        this.$http.get('/api/dictionary/')
+        this.$http.get(`${direction}`)
         .then((response) => {
           this.words = response.data.results
         })
@@ -81,7 +204,7 @@
                   if (bottomOfWindow) {
                     // Load new page
                       this.curPage += 1
-                      this.$http.get(`/api/dictionary/?page=${this.curPage}`)
+                      this.$http.get(`${direction}/?page=${this.curPage}`)
                       .then((response) => {
                         this.words = this.words.concat(response.data.results)
                       })
@@ -91,15 +214,13 @@
             },
 
       Vote: function (id, act) {
-        this.$http.get('/api/dictionary/'+id)
+        this.$http.get(`/api/dictionary/${id}/`)
         .then((response) => {
           this.curWord = response.data
           this.curWord[act] += 1
           this.$http.put(`/api/dictionary/${id}/`, this.curWord)
           .then((response) => {
-            this.words[id - 1][act] = this.curWord[act]
-            // this.curWord = response.data
-            // this.words.result[id] = response.data
+            this.words.find(function(element) {return element.id == id})[act] = this.curWord[act]
           })
           .catch((err) => {
             console.log(err)
@@ -107,17 +228,10 @@
         })
       },
 
-      // putVote: function (id) {
-      //   this.$http.put(`/api/dictionary/${id}/`, this.curWord)
-      //   .then((response) => {
-      //     this.words.results[id] = response.data
-      //     // this.curWord = response.data
-      //     // this.words.result[id] = response.data
-      //   })
-      //   .catch((err) => {
-      //     console.log(err)
-      //   })
-      // },
+      toggleModal: function () {
+        this.showModal = !this.showModal
+      }
+
 
     },
     // end methods
