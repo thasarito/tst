@@ -76,21 +76,33 @@ input[type=text] {
   min-height: 100px;
 }
 
-.text h4 {
+.text a {
+  color: #0074D9;
+  text-decoration: none;
   margin-top: 10px;
   font-size: 20px;
 }
 
-.text h4 span {
+.text a:visited {
+  color: #0074D9;
+}
+
+.text a span {
   font-weight: 400;
   font-size: 16px;
+}
+
+.end {
+  text-align: center;
+  color: #FF4136;
+  margin-bottom: 100px;
 }
 
 #add {
   position: fixed;
   bottom: 20px;
   left: 50%;
-  margin-left: -50px;
+  margin-left: -30px;
   background: none;
   border: none;
   font-size: 60px;
@@ -149,14 +161,14 @@ input[type=text] {
       </a>
     </div>
     <div class="text">
-      <h4>[[ word.name ]]<span> แปลว่า</span></h4>
+      <a  v-bind:href="word.url">[[ word.name ]]</a><span> แปลว่า</span>
       <p>[[ word.meaning ]]</p>
     </div>
-
   </div>
+  <h1 class="end" v-if="end"><i class="fal fa-empty-set"></i></h1>
   <div id="add" v-on:click="toggleModal()"><i class="fas fa-plus-circle"></i></div>
   <!-- div Modal -->
-  <transition name="fade" enter-active-class="animated zoomInUp"  leave-active-class="animated zoomOut faster">
+  <transition name="fade" enter-active-class="animated zoomInUp faster"  leave-active-class="animated zoomOut faster">
     <div id="add-modal" class="modal" v-if="showModal" v-on:click.self="toggleModal()">
       <div class="add-modal-content">
         
@@ -178,7 +190,8 @@ input[type=text] {
     data: {
       words: [],
       curWord: {},
-      curPage: 1,
+      nextPageUrl: null,
+      end: false,
       trigger: 300,
       showModal: false,
       search_term: '',
@@ -204,12 +217,13 @@ input[type=text] {
     methods: {
       getWords: function () {
         let api_url = '/api/dictionary/percUp_list'
-        if (true) {
+        if (this.search_term!==''&&this.search_term!==null) {
           api_url = `/api/dictionary/?search=${this.search_term}`
         }
         this.$http.get(`${api_url}`)
         .then((response) => {
           this.words = response.data.results
+          this.nextPageUrl = response.data.next
         })
         .catch((err) => {
           console.log(err)
@@ -221,11 +235,18 @@ input[type=text] {
                  let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
                   if (bottomOfWindow) {
                     // Load new page
-                      this.curPage += 1
-                      this.$http.get(`${direction}/?page=${this.curPage}`)
+                    if (this.nextPageUrl!==null) {
+                      this.$http.get(this.nextPageUrl)
                       .then((response) => {
                         this.words = this.words.concat(response.data.results)
+                        this.nextPageUrl = response.data.next
+                        console.log(this.nextPageUrl)
                       })
+                      .catch((err) => {
+                        console.log('err')
+                      })
+                    }
+                    else {this.end=true}
                     // End Load
                   }
                };
