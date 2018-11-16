@@ -1,4 +1,5 @@
 import json
+import random
 from dictionary.models import *
 
 
@@ -10,6 +11,8 @@ for d in list_d:
         name = d['word'],
         readas = d['readas'],
         meaning = d['meaning'],
-        url = d['url'],
+        src = d['url'],
+        up = random.randint(0, 100),
+        down = random.randint(0, 100),
     )
     dobj.save()

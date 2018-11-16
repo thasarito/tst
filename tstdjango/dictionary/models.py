@@ -5,7 +5,7 @@ class Dictionary(models.Model):
     name = models.CharField(max_length=128)
     readas = models.CharField(max_length=128)
     meaning = models.TextField()
-    url = models.URLField()
+    src = models.URLField()
     up = models.PositiveIntegerField(default=0)
     down = models.PositiveIntegerField(default=0)
 
