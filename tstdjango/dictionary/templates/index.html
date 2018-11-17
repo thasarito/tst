@@ -8,17 +8,19 @@
 * {
   font-family: 'Bai Jamjuree', sans-serif;
 }
-@media only screen and (min-width: 768px) {
-  .content {
-     max-width: 700px; 
-     margin: auto;
-  }
+
+.content {
+  max-width: 600px;
+  margin: auto;
+  width: 100%;
 }
 
-
-@media only screen and (max-width: 768px) {
-  .content {
-      width: 100%;
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+  html {
+    width: 100%;
   }
 }
 
@@ -85,7 +87,8 @@
   margin-top: 8px;
   font-size: 17px;
   border: none;
-  width: 400px;
+  width: 80%;
+  max-width: 400px;
   border: 1px solid #d9d9d9;
 }
 
@@ -211,9 +214,10 @@
 
 .add-modal-content {
   height: 500px;
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   margin: auto;
-  padding: 30px;
+  /*padding: 30px;*/
   background-color: white;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
@@ -265,7 +269,6 @@
 <div id="app">
   <div class="search-container">
       <input type="text" placeholder="ค้นหา.." v-model="live_search" aria-label="Search">
-      <button type="submit" v-on:click.prevent="getWords()"><i class="fa fa-search"></i></button>
   </div>
   <div class="card animated slideInUp" v-for="word in words">
     <div class="score">
