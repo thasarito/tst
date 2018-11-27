@@ -1,0 +1,29 @@
+{% extends "base_dictionary.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div id="app">
+	<word-list
+		v-for="word in words"
+		v-bind:key="word.id"
+		v-bind:word="word"></word-list>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript">Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";</script>
+<script type="text/javascript" src="{% static 'js/components/list-view.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+

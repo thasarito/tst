@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <title>Plaevar</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-j8y0ITrvFafF4EkV1mPW0BKm6dp3c+J9Fky22Man50Ofxo2wNe5pT1oZejDH9/Dt" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Bai+Jamjuree" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    {% block head %}
+    {% endblock %}
+    {% block style %}
+    {% endblock %}
+  </head>
+  <body>
+    <nav>
+      <a class="logo" href=""><i class="fab fa-pinterest-p"></i><i class="fab fa-vuejs"> แปลว่า</i></a>
+      <ul>
+        <li><a href="">คำศัพท์<span>มาแรง <i class="far fa-angle-down"></i></span></a></li>
+        <li><a href="">คำศัพท์<span>ล่าสุด <i class="far fa-angle-down"></i></span></a></li>
+        <li><a href="">ค้นหา<span>หมวดหมู่ <i class="far fa-angle-down"></i></span></a></li>
+      </ul>
+      <a class="nav-right nav-right-login" href="">ลงชื่อ/สมัคร</a>
+      <a class="nav-right" href=""><i class="fab fa-facebook-square"></i></a>
+      <a class="nav-right" href=""><i class="fab fa-line"></i></a>
+    </nav>
+    <div class="content">
+  {% block content %}
+  {% endblock %}
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
+  {% block script %}
+  {% endblock %}
+    </div>
+  </body>
+</html>

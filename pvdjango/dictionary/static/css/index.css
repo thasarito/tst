@@ -1,0 +1,226 @@
+* {
+  font-family: 'Bai Jamjuree', sans-serif;
+}
+
+.content {
+  max-width: 600px;
+  margin: auto;
+  width: 100%;
+}
+
+@media only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px) 
+  and (-webkit-min-device-pixel-ratio: 2) { 
+  html {
+    width: 100%;
+  }
+}
+
+.login {
+  text-align: center;
+}
+
+.social-login {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  background-color: #0074D9;
+  width: 15%;
+  height: 40px;
+  margin: 0px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;  
+  display: inline-block;
+  font-size: 30px;
+}
+
+.social-login a {
+  display: block;
+  text-decoration: none;
+  color: white;
+}
+
+.index-to-login {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  background-color: #0074D9;
+  width: 30%;
+  min-width: 200px;
+  height: 40px;
+  margin: auto;
+  margin-top: 5px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.index-to-login a {
+  text-decoration: none;
+  color: white;
+  display: block;
+}
+
+.search-container {
+  text-align: center;
+}
+
+.search-container input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #d9d9d9;
+}
+
+.search-container button {
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+  background: #0074D9;
+  color: white;
+}
+
+.search-container button:hover {
+  background: white;
+  color: #0074D9;
+  border: 1px solid #0074D9;
+}
+
+#app {
+  width: 100%;
+}
+
+.card {
+  max-width: 100%;
+  margin: 20px auto;
+  min-height: 100px;
+  border: 1px solid #d9d9d9;
+  padding: 5px;
+  line-height: 30px;
+}
+
+.score {
+  width: 9%;
+  display: inline-block;
+  text-align: center;
+  min-height: 150px;
+  margin-top: 10px;
+  vertical-align: top;
+}
+
+.score * {
+  display: block;
+}
+
+.text {
+  width: 89%;
+  display: inline-block;
+  min-height: 100px;
+  margin-top: 15px;
+  vertical-align: top;
+}
+
+.text a {
+  color: #0074D9;
+  text-decoration: none;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.text a:visited {
+  color: #0074D9;
+}
+
+.text a span {
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.load-more {
+  background: none;
+  border: none;
+  border-radius: 5px;
+  background-color: #0074D9;
+  max-width: 60%;
+  height: 50px;
+  margin: auto;
+  color: white;
+  margin-bottom: 100px;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.end {
+  text-align: center;
+  color: #FF4136;
+  margin-bottom: 100px;
+}
+
+#add {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -30px;
+  background: none;
+  border: none;
+  font-size: 60px;
+  cursor: pointer;
+  color: #0074D9;
+}
+
+#add p {
+  width: 20px;
+  height: 20px;
+  margin: 0px;
+}
+
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+
+}
+
+
+.add-modal-content {
+  height: 500px;
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+  /*padding: 30px;*/
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.add-modal-content input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+}
+
+.add-modal-content textarea {
+  width: 100%;
+  border: 1px solid #d9d9d9;
+}
